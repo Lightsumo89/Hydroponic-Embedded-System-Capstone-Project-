@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hydroponic Sensor Dashboard</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #051937, #004d7a, #008793, #00bf72);
+      min-height: 100vh;
+      color: white;
+      padding: 30px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .title-box {
+      text-align: center;
+      padding: 30px 20px;
+      margin-bottom: 30px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 0 25px rgba(0,0,0,0.3);
+    }
+
+    .title-box h1 {
+      font-size: 2.7rem;
+      letter-spacing: 1px;
+      text-shadow: 0 0 10px #00ffcc;
+    }
+
+    .title-box p {
+      margin-top: 10px;
+      font-size: 1.1rem;
+      color: #e6fff9;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-bottom: 35px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.14);
+      border: 2px solid rgba(255,255,255,0.25);
+      border-radius: 20px;
+      padding: 25px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0,0,0,0.25);
+      transition: transform 0.3s, box-shadow 0.3s;
+      backdrop-filter: blur(10px);
+    }
+
+    .card:hover {
+      transform: translateY(-8px) scale(1.03);
+      box-shadow: 0 0 30px rgba(0,255,200,0.5);
+    }
+
+    .card h2 {
+      font-size: 1.2rem;
+      margin-bottom: 12px;
+      color: #dffff8;
+    }
+
+    .reading {
+      font-size: 2.3rem;
+      font-weight: bold;
+      color: #fff700;
+      text-shadow: 0 0 12px rgba(255,247,0,0.7);
+      margin-bottom: 8px;
+    }
+
+    .status {
+      font-size: 1rem;
+      color: #ffffff;
+      background: rgba(0,0,0,0.18);
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+    }
+
+    .section {
+      background: rgba(255,255,255,0.12);
+      border-radius: 20px;
+      padding: 25px;
+      margin-bottom: 30px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.25);
+      backdrop-filter: blur(8px);
+    }
+
+    .section h3 {
+      margin-bottom: 18px;
+      font-size: 1.6rem;
+      color: #ffffff;
+      text-shadow: 0 0 8px #00ffd5;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 12px;
+    }
+
+    th, td {
+      padding: 14px;
+      text-align: center;
+    }
+
+    th {
+      background: rgba(0,0,0,0.35);
+      color: #00ffd5;
+      font-size: 1rem;
+    }
+
+    td {
+      background: rgba(255,255,255,0.12);
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+    }
+
+    tr:hover td {
+      background: rgba(255,255,255,0.2);
+    }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 10px;
+      color: #eaffff;
+      font-size: 0.95rem;
+    }
+
+    .glow {
+      animation: glowPulse 2s infinite alternate;
+    }
+
+    @keyframes glowPulse {
+      from {
+        text-shadow: 0 0 8px #00ffd5, 0 0 14px #00ffd5;
+      }
+      to {
+        text-shadow: 0 0 16px #fff700, 0 0 24px #fff700;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .title-box h1 {
+        font-size: 2rem;
+      }
+
+      .reading {
+        font-size: 1.8rem;
+      }
+
+      th, td {
+        font-size: 0.9rem;
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="title-box">
+      <h1 class="glow">Hydroponic Sensor Dashboard</h1>
+      <p>Live database readouts for water temperature, pH, and water level</p>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h2>🌡 Water Temperature</h2>
+        <div class="reading" id="temp">68.4°F</div>
+        <div class="status">Optimal</div>
+      </div>
+
+      <div class="card">
+        <h2>🧪 pH Level</h2>
+        <div class="reading" id="ph">6.1</div>
+        <div class="status">Stable</div>
+      </div>
+
+      <div class="card">
+        <h2>💧 Water Level</h2>
+        <div class="reading" id="level">74%</div>
+        <div class="status">Normal</div>
+      </div>
+
+      <div class="card">
+        <h2>🌿 System Status</h2>
+        <div class="reading" id="system">ONLINE</div>
+        <div class="status">Sensors Active</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>Recent Sensor Readouts</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Water Temp</th>
+            <th>pH Level</th>
+            <th>Water Level</th>
+          </tr>
+        </thead>
+        <tbody id="historyTable">
+          <tr>
+            <td>8:00 AM</td>
+            <td>67.9°F</td>
+            <td>6.0</td>
+            <td>76%</td>
+          </tr>
+          <tr>
+            <td>9:00 AM</td>
+            <td>68.1°F</td>
+            <td>6.0</td>
+            <td>75%</td>
+          </tr>
+          <tr>
+            <td>10:00 AM</td>
+            <td>68.3°F</td>
+            <td>6.1</td>
+            <td>75%</td>
+          </tr>
+          <tr>
+            <td>11:00 AM</td>
+            <td>68.4°F</td>
+            <td>6.1</td>
+            <td>74%</td>
+          </tr>
+          <tr>
+            <td>12:00 PM</td>
+            <td>68.4°F</td>
+            <td>6.2</td>
+            <td>74%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="footer-note">Demo version — you can later connect these values to a real database or sensor feed.</p>
+  </div>
+
+  <script>
+    // Demo live update effect
+    function randomBetween(min, max) {
+      return (Math.random() * (max - min) + min).toFixed(1);
+    }
+
+    function updateDashboard() {
+      const temp = randomBetween(67.5, 69.5);
+      const ph = randomBetween(5.8, 6.4);
+      const level = Math.floor(Math.random() * 8) + 70;
+
+      document.getElementById("temp").textContent = temp + "°F";
+      document.getElementById("ph").textContent = ph;
+      document.getElementById("level").textContent = level + "%";
+    }
+
+    setInterval(updateDashboard, 3000);
+  </script>
+</body>
+</html>
