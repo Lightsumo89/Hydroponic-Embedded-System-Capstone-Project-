@@ -1,5 +1,14 @@
+"""
+Python Backend via FastAPI and SQLite3
+
+- Takes JSON packets via HTTP POST from ESP32 
+- Validates Data via Pydantic
+- Commits into SQLite database file (WAL mode enabled)
+- Creates Endpoints for frontend data retrieval
+"""
+
 from fastapi import FastAPI, Depends, HTTPException
-from sqlalchemy import create_engine, event, Column, Integer, String, Float
+from sqlalchemy import Boolean, create_engine, event, Column, Integer, String, Float
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
 from pydantic import BaseModel, Field
@@ -31,13 +40,16 @@ Base = declarative_base()
 class Telemetry(Base):
     __tablename__ = "telemetry"
     id = Column(Integer, primary_key=True, index=True)
-    time = Column(Float, index=True)
-    temp = Column(Float)
+    timestamp = Column(String, index=True)
+    temperature_water = Column(Float)
+    temperature_air = Column(Float)
+    humidity = Column(Float)
     ph = Column(Float)
-    ntu = Column(Float)
-
-    # metric_type = Column(String) # Temp, PH, Turpidity, etc.
-    # metric_value = Column(Float) # Degrees, PH Level, NTU
+    ec = Column(Float)
+    turbidity = Column(Float)
+    water_level = Column(Float)
+    pump_on = Column(Boolean)
+    lights_on = Column(Boolean)
 
 # Create Database Tables
 Base.metadata.create_all(bind=engine)
@@ -52,23 +64,36 @@ def get_db():
         db.close()
 
 
-# Pydantic Model For Data Creation
+# Pydantic Model for data creation
 class DataCreate(BaseModel):
-    time: float
-    temp = float
-    ph = float
-    ntu = float
+    timestamp: str 
+    pump_on: bool
+    lights_on: bool
+    # Data Validation Via Pydantic Field Using Ranges From Arduino
+    temperature_water: float = Field(ge=0.0, le=50) # x >= 0, x <= 50
+    temperature_air: float = Field(ge=0.0, le=50) 
+    humidity: float = Field(ge=0.0, le=100)
+    ph: float = Field(ge=0.0, le=14)
+    ec: float = Field(ge=0.0, le=10)
+    turbidity: float = Field(ge=0.0, le=3000)
+    water_level: float = Field(ge=0.0, le=100)
 
 
-# Pydantic Model For Data Retrieval
+# Pydantic model for data retrieval from SQLite Database
 class DataResponse(BaseModel):
-    time: float
-    temp = float
-    ph = float
-    ntu = float
+    timestamp: str
+    pump_on: bool
+    lights_on: bool
+    temperature_water: float
+    temperature_air: float
+    humidity: float
+    ph: float
+    ec: float
+    turbidity: float
+    water_level: float
 
 
-# API Endpoint For Created Data Insertion Into Database
+# API Endpoint for data creation and database commits
 @app.post("/telemetry/", response_model=DataResponse)
 async def create_item(item: DataCreate, db: Session = Depends(get_db)):
     db_item = Telemetry(**item.model_dump())
@@ -78,7 +103,7 @@ async def create_item(item: DataCreate, db: Session = Depends(get_db)):
     return db_item
 
 
-# API Endpoint For Item Retrieval From Database Via ID
+# API Endpoint For data retrieval from database via ID
 @app.get("/telemetry/{item_id}", response_model=DataResponse)
 async def read_item(item_id: int, db: Session = Depends(get_db)):
     db_item = db.query(Telemetry).filter(Telemetry.id == item_id).first()
@@ -86,7 +111,14 @@ async def read_item(item_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Item not found")
     return db_item
 
-# | COMMANDS & LINKS |
-# uvicorn main:app --reload
-# http://localhost:8000/
-# http://localhost:8000/docs
+"""
+Initialize and view FastAPI Docs:
+- uvicorn main:app --reload
+- http://localhost:8000/docs
+
+Build venv virtual environment (vscode):
+- python -m venv .venv
+- .\.venv\Scripts\activate
+- pip install fastapi uvicorn sqlalchemy pydantic
+
+"""
