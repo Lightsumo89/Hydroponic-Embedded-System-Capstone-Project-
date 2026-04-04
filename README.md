@@ -5,6 +5,7 @@
 2. Builds JSON 
 3. Sends to ESP32 via Serial1
 
+### Arduino Mega Wiring
 - Serial1 (TX1=Pin18, RX1=Pin19) → ESP32 RX/TX
 - Baud: 115200
 
@@ -12,6 +13,7 @@
 1. Listens on Serial2 (RX2=GPIO16) for newline-terminated JSON
 2. Then POSTs it to the FastAPI server
 
+### ESP32 Wiring
 - Mega TX1 (pin 18) → voltage divider → ESP32 RX2 (GPIO16)
 - Common GND between Mega and ESP32 is REQUIRED
 
@@ -36,7 +38,7 @@ Python Backend via FastAPI and SQLite3
 
 ## Interactive Documentation
 - Once the API is running, visit the interactive docs at:
-    [http://127.0.0.1:8000/docs]
+    <http://127.0.0.1:8000/docs>
 
 # Hydroponics Frontend
 
