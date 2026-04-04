@@ -1,4 +1,3 @@
-Read me file
 
 # Hydroponics Backend
 
@@ -20,5 +19,5 @@ Python Backend via FastAPI and SQLite3
     `uvicorn main:app --reload`
 
 ## Interactive Documentation
-Once the server is running, visit the interactive docs at:
-[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+Once the API is running, visit the interactive docs at:
+[http://127.0.0.1:8000/docs]
