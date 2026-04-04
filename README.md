@@ -1,19 +1,19 @@
 # Hydroponics IoT
 
 ## Arduino Mega Sensor Hub
-- Reads all sensors 
-- Builds JSON 
-- Sends to ESP32 via Serial1
+1. Reads all sensors 
+2. Builds JSON 
+3. Sends to ESP32 via Serial1
 
-1. Serial1 (TX1=Pin18, RX1=Pin19) → ESP32 RX/TX
-2. Baud: 115200
+- Serial1 (TX1=Pin18, RX1=Pin19) → ESP32 RX/TX
+- Baud: 115200
 
 ## ESP32 WiFi Bridge
-- Listens on Serial2 (RX2=GPIO16) for newline-terminated JSON
-- Then POSTs it to the FastAPI server
+1. Listens on Serial2 (RX2=GPIO16) for newline-terminated JSON
+2. Then POSTs it to the FastAPI server
 
-1. Mega TX1 (pin 18) → voltage divider → ESP32 RX2 (GPIO16)
-2. Common GND between Mega and ESP32 is REQUIRED
+- Mega TX1 (pin 18) → voltage divider → ESP32 RX2 (GPIO16)
+- Common GND between Mega and ESP32 is REQUIRED
 
 # Hydroponics Backend
 
