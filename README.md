@@ -28,12 +28,13 @@ Python Backend via FastAPI and SQLite3
 
 ## Running the Backend
 1.  **Create Environment**: 
-    `python -m venv .venv`
-2.  **Activate Environment**: 
+    Linux: 'source .venv/bin/activate'
+    Windows (PowerShell): '.\.venv\Scripts\activate'
+3.  **Activate Environment**: 
     `.\.venv\Scripts\activate`
-3.  **Install Dependencies**: 
+4.  **Install Dependencies**: 
     `pip install -r requirements.txt`
-4.  **Launch API**: 
+5.  **Launch API**: 
     `uvicorn main:app --reload`
 
 ## Interactive Documentation
