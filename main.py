@@ -7,11 +7,14 @@ Python Backend via FastAPI and SQLite3
 - Creates Endpoints for frontend data retrieval
 """
 
+from typing import List
+
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy import Boolean, create_engine, event, Column, Integer, String, Float
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
 from pydantic import BaseModel, Field
+from fastapi.responses import HTMLResponse
 
 # Create FastAPI App
 app = FastAPI()
@@ -78,9 +81,9 @@ class DataCreate(BaseModel):
     turbidity: float = Field(ge=0.0, le=3000)
     water_level: float = Field(ge=0.0, le=100)
 
-
 # Pydantic model for data retrieval from SQLite Database
 class DataResponse(BaseModel):
+    id: int
     timestamp: str
     pump_on: bool
     lights_on: bool
@@ -102,7 +105,6 @@ async def create_item(item: DataCreate, db: Session = Depends(get_db)):
     db.refresh(db_item)
     return db_item
 
-
 # API Endpoint For data retrieval from database via ID
 @app.get("/telemetry/{item_id}", response_model=DataResponse)
 async def read_item(item_id: int, db: Session = Depends(get_db)):
@@ -110,6 +112,13 @@ async def read_item(item_id: int, db: Session = Depends(get_db)):
     if db_item is None:
         raise HTTPException(status_code=404, detail="Item not found")
     return db_item
+
+# API Endpoint for bulk data retrieval
+@app.get("/telemetry/", response_model=List[DataResponse])
+async def bulk_read_item(limit: int = 100, db: Session = Depends(get_db)):
+    items = db.query(Telemetry).order_by(Telemetry.id.desc()).limit(limit).all()
+    return items
+
 
 """
 Initialize and view FastAPI Docs:
