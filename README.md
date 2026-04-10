@@ -43,3 +43,4 @@ Python Backend via FastAPI and SQLite3
 
 # Hydroponics Frontend
 
+Currnent Link to HTML Page: https://www.cs.oswego.edu/~jgallag2/Hydroponic-Embedded-System-Capstone-Project--main/Mockup1.html
