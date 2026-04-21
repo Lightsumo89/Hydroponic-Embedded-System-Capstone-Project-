@@ -150,7 +150,7 @@ async def bulk_read_item(
                         db: Session = Depends(get_db)):
     query = db.query(Telemetry)
     # Use SQLAlchemy filters to sort through database for given time range
-    if start_time:
+    if start_time: # Example timestamp: 2026-04-21 18:30:21
         query = query.filter(Telemetry.timestamp >= start_time)
     if end_time:
         query = query.filter(Telemetry.timestamp <= end_time)
