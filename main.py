@@ -44,7 +44,7 @@ hydro_backend.add_middleware(
     allow_headers=["*"],
 )
 
-# Database Setup, specifies location of hydroponics.db filepath, __file__ is main.py
+# Database Setup, specifies location of main.py filepath and removes main.py -> attaches hydroponics.db 
 DATABASE_URL = f"sqlite:///{os.path.join(os.path.dirname(os.path.abspath(__file__)),'hydroponics.db')}"
 engine = create_engine(
     DATABASE_URL, 
