@@ -28,10 +28,10 @@ Python Backend via FastAPI and SQLite3
 
 ## Running the Backend
 1.  **Create Environment**: 
-    - Linux: `source .venv/bin/activate`
-    - Windows (PowerShell): `.\.venv\Scripts\activate`
+    `python -m venv .venv`
 3.  **Activate Environment**: 
-    `.\.venv\Scripts\activate`
+    - Linux: `source .venv/bin/activate`
+    - Windows: `.\.venv\Scripts\activate`
 4.  **Install Dependencies**: 
     `pip install -r requirements.txt`
 5.  **Launch API**: 
