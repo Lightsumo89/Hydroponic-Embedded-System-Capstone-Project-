@@ -35,11 +35,17 @@ Python Backend via FastAPI and SQLite3
 4.  **Install Dependencies**: 
     `pip install -r requirements.txt`
 5.  **Launch API**: 
-    `uvicorn main:app --reload`
+    `uvicorn main:hydro_backend --reload`
 
 ## Interactive Documentation
 - Once the API is running, visit the interactive docs at:
     <http://127.0.0.1:8000/docs>
+
+## Connecting to ESP32
+1. Change SERVER_URL in esp32-wifi.ino
+    - `const char* SERVER_URL = "https://https://www.cs.oswego.edu/username/telemetry/";`
+        - NOTE: This is an example, change to correct endpoint url.
+2. Update WIFI_PASSWORD & WIFI_SSID
 
 # Hydroponics Frontend
 
