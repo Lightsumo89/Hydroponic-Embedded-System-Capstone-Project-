@@ -27,10 +27,18 @@ from sqlalchemy import Boolean, create_engine, event, Column, Integer, String, F
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
 from pydantic import BaseModel, Field
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
 
 # Create FastAPI Instance
 hydro_backend = FastAPI()
+
+# Mount and host frontend files alongside FastAPI
+hydro_backend.mount("/static", StaticFiles(directory="static"), name="static")
+@hydro_backend.get("/") # Serves frontend through the same root address as backend
+async def serve_dashboard():
+    return FileResponse("static/index.html")
 
 # Utilize CORS middleware to manage permissions between backend and frontend domains
 hydro_backend.add_middleware(
